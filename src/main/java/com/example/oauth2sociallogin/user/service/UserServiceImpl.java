@@ -1,6 +1,6 @@
 package com.example.oauth2sociallogin.user.service;
 
-import com.example.oauth2sociallogin.exceptions.CrustInterviewProjectException;
+import com.example.oauth2sociallogin.exceptions.OAuth2SocialLoginException;
 import com.example.oauth2sociallogin.notification.EmailService;
 import com.example.oauth2sociallogin.otptoken.OtpToken;
 import com.example.oauth2sociallogin.otptoken.OtpTokenRepository;
@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getExistingUser(String email) {
         return (User)this.userRepository.findByEmailAddress(email).orElseThrow(() -> {
-            return new CrustInterviewProjectException("User not found!!");
+            return new OAuth2SocialLoginException("User not found!!");
         });
     }
 

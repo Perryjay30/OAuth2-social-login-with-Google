@@ -1,6 +1,6 @@
 package com.example.oauth2sociallogin.task.service;
 
-import com.example.oauth2sociallogin.exceptions.CrustInterviewProjectException;
+import com.example.oauth2sociallogin.exceptions.OAuth2SocialLoginException;
 import com.example.oauth2sociallogin.task.data.dto.TaskRequest;
 import com.example.oauth2sociallogin.task.data.model.Priority;
 import com.example.oauth2sociallogin.task.data.model.Task;
@@ -46,7 +46,7 @@ public class TaskServiceImpl implements TaskService {
     public Response updateTask(Long taskId, String emailAddress, TaskRequest request) {
         User existingUser = this.findExistingUser(emailAddress);
         Task foundTask = taskRepository.findByTaskIdAndUser(taskId, existingUser).orElseThrow(() ->
-            new CrustInterviewProjectException("Task Id Does not Exist"));
+            new OAuth2SocialLoginException("Task Id Does not Exist"));
         foundTask.setTitle(request.getTitle() != null && !request.getTitle().equals("") ? request.getTitle() : foundTask.getTitle());
         foundTask.setDescription(request.getDescription() != null && !request.getDescription().equals("") ? request.getDescription() : foundTask.getDescription());
         foundTask.setTaskPriority(request.getTaskPriority() != null && !request.getTaskPriority().equals("") ? Priority.valueOf(request.getTaskPriority()) : foundTask.getTaskPriority());
@@ -59,7 +59,7 @@ public class TaskServiceImpl implements TaskService {
     public Response deleteTask(Long taskId, String emailAddress) {
         User existingUser = this.findExistingUser(emailAddress);
         Task foundTask = taskRepository.findByTaskIdAndUser(taskId, existingUser).orElseThrow(() ->
-            new CrustInterviewProjectException("Task Id Does not Exist"));
+            new OAuth2SocialLoginException("Task Id Does not Exist"));
         foundTask.setDeletedAt(LocalDateTime.now());
         foundTask.setTaskStatus(TaskStatus.DELETED);
         this.taskRepository.save(foundTask);
@@ -68,7 +68,7 @@ public class TaskServiceImpl implements TaskService {
 
     private User findExistingUser(String emailAddress) {
         return userRepository.findByEmailAddress(emailAddress).orElseThrow(() ->
-                new CrustInterviewProjectException("User not found!!"));
+                new OAuth2SocialLoginException("User not found!!"));
     }
 }
 

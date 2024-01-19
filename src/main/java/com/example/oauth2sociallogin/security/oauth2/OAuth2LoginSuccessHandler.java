@@ -1,6 +1,6 @@
 package com.example.oauth2sociallogin.security.oauth2;
 
-import com.example.oauth2sociallogin.exceptions.CrustInterviewProjectException;
+import com.example.oauth2sociallogin.exceptions.OAuth2SocialLoginException;
 import com.example.oauth2sociallogin.user.data.model.AuthProvider;
 import com.example.oauth2sociallogin.user.data.model.User;
 import com.example.oauth2sociallogin.user.repository.UserRepository;
@@ -39,7 +39,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
     private void updateUserAfterOAuthLoginSuccess(String emailAddress, String firstName) {
         User existingUser = (User)this.userRepository.findByEmailAddress(emailAddress).orElseThrow(() ->
-            new CrustInterviewProjectException("User not found!!"));
+            new OAuth2SocialLoginException("User not found!!"));
         existingUser.setAuthProvider(AuthProvider.GOOGLE);
         existingUser.setFirstName(firstName);
         this.userRepository.save(existingUser);
