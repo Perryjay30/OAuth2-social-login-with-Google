@@ -16,15 +16,15 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "This field is required")
+//    @NotBlank(message = "This field is required")
     private String firstName;
-    @NotBlank(message = "This field is required")
+//    @NotBlank(message = "This field is required")
     private String lastName;
-    @NotBlank(message = "This field is required")
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$")
+//    @NotBlank(message = "This field is required")
+//    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$")
     private String password;
-    @NotBlank(message = "This field is required")
-    @Email(message = "This email must be valid")
+//    @NotBlank(message = "This field is required")
+//    @Email(message = "This email must be valid")
     private String emailAddress;
     @Enumerated(EnumType.STRING)
     private Status status;

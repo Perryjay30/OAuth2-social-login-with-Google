@@ -26,11 +26,11 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         CustomOauth2User oauth2User = (CustomOauth2User)authentication.getPrincipal();
         String emailAddress = oauth2User.getEmail();
         String firstName = oauth2User.getName();
-        Optional<User> user = this.userRepository.findByEmailAddress(emailAddress);
+        Optional<User> user = userRepository.findByEmailAddress(emailAddress);
         if (user.isEmpty()) {
-            this.createNewUserAfterOAuthLoginSuccess(emailAddress, firstName);
+            createNewUserAfterOAuthLoginSuccess(emailAddress, firstName);
         } else {
-            this.updateUserAfterOAuthLoginSuccess(emailAddress, firstName);
+            updateUserAfterOAuthLoginSuccess(emailAddress, firstName);
         }
 
         System.out.println("User's emailAddress: " + emailAddress);
@@ -38,11 +38,11 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     }
 
     private void updateUserAfterOAuthLoginSuccess(String emailAddress, String firstName) {
-        User existingUser = (User)this.userRepository.findByEmailAddress(emailAddress).orElseThrow(() ->
+        User existingUser = userRepository.findByEmailAddress(emailAddress).orElseThrow(() ->
             new OAuth2SocialLoginException("User not found!!"));
         existingUser.setAuthProvider(AuthProvider.GOOGLE);
         existingUser.setFirstName(firstName);
-        this.userRepository.save(existingUser);
+        userRepository.save(existingUser);
     }
 
     private void createNewUserAfterOAuthLoginSuccess(String emailAddress, String firstName) {
@@ -50,6 +50,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         user.setEmailAddress(emailAddress);
         user.setAuthProvider(AuthProvider.GOOGLE);
         user.setFirstName(firstName);
-        this.userRepository.save(user);
+        userRepository.save(user);
     }
 }

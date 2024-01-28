@@ -2,6 +2,7 @@ package com.example.oauth2sociallogin.security.oauth2;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Map;
@@ -14,18 +15,18 @@ public class CustomOauth2User implements OAuth2User {
     }
 
     public Map<String, Object> getAttributes() {
-        return this.oAuth2User.getAttributes();
+        return oAuth2User.getAttributes();
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.oAuth2User.getAuthorities();
+        return oAuth2User.getAuthorities();
     }
 
     public String getName() {
-        return (String)this.oAuth2User.getAttribute("name");
+        return oAuth2User.getAttribute("name");
     }
 
     public String getEmail() {
-        return (String)this.oAuth2User.getAttribute("email");
+        return oAuth2User.getAttribute("email");
     }
 }

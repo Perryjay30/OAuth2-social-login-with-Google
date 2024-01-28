@@ -1,6 +1,7 @@
 package com.example.oauth2sociallogin.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.oauth2sociallogin.security.oauth2.CustomOAuth2UserService;
+import com.example.oauth2sociallogin.security.oauth2.OAuth2LoginSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,8 +23,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private JwtFilter jwtFilter;
+    private final JwtFilter jwtFilter;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+
+    public SecurityConfig(JwtFilter jwtFilter, CustomOAuth2UserService customOAuth2UserService, OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler) {
+        this.jwtFilter = jwtFilter;
+        this.customOAuth2UserService = customOAuth2UserService;
+        this.oAuth2LoginSuccessHandler = oAuth2LoginSuccessHandler;
+    }
+
     @Bean
     public UserDetailsService userDetailsService() {
         return new FetchUserDetailsFromDbService();
@@ -33,15 +42,20 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("api/v1/customer/register", "api/v1/vendor/register", "starlight/authenticateUsers", "api/v1/customer/createAccount/{email}",
-                        "api/v1/vendor/createAccount/{email}", "api/v1/customer/login", "api/v1/vendor/vendorLogin")
+                .requestMatchers("api/v1/user/**", "login/oauth2/**")
                 .permitAll()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("api/v1/customer/**", "api/v1/vendor/**", "api/v1/product/**", "cartingAndProduct/**")
+                .requestMatchers("api/v1/task/**")
                 .authenticated()
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .oauth2Login()
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService)
+                .and()
+                .successHandler(oAuth2LoginSuccessHandler)
                 .and()
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
@@ -65,4 +79,5 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
 }

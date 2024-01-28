@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByEmailAddress(registrationRequest.getEmailAddress()).isPresent()) {
             throw new RuntimeException("Email Address already exists!!");
         } else {
-            User user = (User)objectMapper.convertValue(registrationRequest, User.class);
+            User user = objectMapper.convertValue(registrationRequest, User.class);
             user.setRole(Role.USER);
             user.setStatus(Status.UNVERIFIED);
             user.setAuthProvider(AuthProvider.LOCAL);
