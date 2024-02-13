@@ -1,7 +1,7 @@
 package com.example.oauth2sociallogin.security;
 
 import com.example.oauth2sociallogin.security.oauth2.CustomOAuth2UserService;
-import com.example.oauth2sociallogin.security.oauth2.OAuth2LoginSuccessHandler;
+import com.example.oauth2sociallogin.security.oauth2.GoogleOAuth2LoginSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,12 +25,12 @@ public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
     private final CustomOAuth2UserService customOAuth2UserService;
-    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final GoogleOAuth2LoginSuccessHandler googleOAuth2LoginSuccessHandler;
 
-    public SecurityConfig(JwtFilter jwtFilter, CustomOAuth2UserService customOAuth2UserService, OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler) {
+    public SecurityConfig(JwtFilter jwtFilter, CustomOAuth2UserService customOAuth2UserService, GoogleOAuth2LoginSuccessHandler oAuth2LoginSuccessHandler) {
         this.jwtFilter = jwtFilter;
         this.customOAuth2UserService = customOAuth2UserService;
-        this.oAuth2LoginSuccessHandler = oAuth2LoginSuccessHandler;
+        this.googleOAuth2LoginSuccessHandler = oAuth2LoginSuccessHandler;
     }
 
     @Bean
@@ -55,7 +55,7 @@ public class SecurityConfig {
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService)
                 .and()
-                .successHandler(oAuth2LoginSuccessHandler)
+                .successHandler(googleOAuth2LoginSuccessHandler)
                 .and()
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

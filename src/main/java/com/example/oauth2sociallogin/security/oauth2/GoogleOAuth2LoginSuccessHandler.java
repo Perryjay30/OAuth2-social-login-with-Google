@@ -15,10 +15,10 @@ import java.io.IOException;
 import java.util.Optional;
 
 @Service
-public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+public class GoogleOAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final UserRepository userRepository;
 
-    public OAuth2LoginSuccessHandler(UserRepository userRepository) {
+    public GoogleOAuth2LoginSuccessHandler(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

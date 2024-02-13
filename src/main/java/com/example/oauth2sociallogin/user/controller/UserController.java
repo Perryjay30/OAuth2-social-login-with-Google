@@ -28,6 +28,9 @@ public class UserController {
     }
 
     @GetMapping({"/login"})
+    //Social login with google: http://localhost:2024/login/oauth2/code/google
+    //Social login with google: http://localhost:2024/login/oauth2/code/github
+    //Social login with facebook: https://localhost:2024/oauth2/callback/facebook
     public LoginResponse login(@RequestBody LoginRequest loginRequest) {
         return this.userService.login(loginRequest);
     }
