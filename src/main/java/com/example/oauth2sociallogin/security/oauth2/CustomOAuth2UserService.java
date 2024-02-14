@@ -8,11 +8,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
-//    public CustomOAuth2UserService() {
-//    }
 
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        String clientName = userRequest.getClientRegistration().getClientName();
         OAuth2User user = super.loadUser(userRequest);
-        return new CustomOauth2User(user);
+        return new CustomOauth2User(clientName, user);
     }
 }

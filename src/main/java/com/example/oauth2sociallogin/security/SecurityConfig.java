@@ -1,7 +1,10 @@
 package com.example.oauth2sociallogin.security;
 
+import com.example.oauth2sociallogin.security.oauth2.AllOAuth2LoginSuccessHandler;
 import com.example.oauth2sociallogin.security.oauth2.CustomOAuth2UserService;
+import com.example.oauth2sociallogin.security.oauth2.GithubOAuth2LoginSuccessHandler;
 import com.example.oauth2sociallogin.security.oauth2.GoogleOAuth2LoginSuccessHandler;
+import com.example.oauth2sociallogin.user.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,13 +27,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
+    private final UserRepository userRepository;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final AllOAuth2LoginSuccessHandler allOAuth2LoginSuccessHandler;
     private final GoogleOAuth2LoginSuccessHandler googleOAuth2LoginSuccessHandler;
+    private final GithubOAuth2LoginSuccessHandler githubOAuth2LoginSuccessHandler;
 
-    public SecurityConfig(JwtFilter jwtFilter, CustomOAuth2UserService customOAuth2UserService, GoogleOAuth2LoginSuccessHandler oAuth2LoginSuccessHandler) {
+    public SecurityConfig(JwtFilter jwtFilter, UserRepository userRepository, CustomOAuth2UserService customOAuth2UserService,
+                          AllOAuth2LoginSuccessHandler allOAuth2LoginSuccessHandler, GoogleOAuth2LoginSuccessHandler googleOAuth2LoginSuccessHandler, GithubOAuth2LoginSuccessHandler githubOAuth2LoginSuccessHandler) {
         this.jwtFilter = jwtFilter;
+        this.userRepository = userRepository;
         this.customOAuth2UserService = customOAuth2UserService;
-        this.googleOAuth2LoginSuccessHandler = oAuth2LoginSuccessHandler;
+        this.allOAuth2LoginSuccessHandler = allOAuth2LoginSuccessHandler;
+        this.googleOAuth2LoginSuccessHandler = googleOAuth2LoginSuccessHandler;
+        this.githubOAuth2LoginSuccessHandler = githubOAuth2LoginSuccessHandler;
     }
 
     @Bean
@@ -55,7 +65,7 @@ public class SecurityConfig {
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService)
                 .and()
-                .successHandler(googleOAuth2LoginSuccessHandler)
+                .successHandler(allOAuth2LoginSuccessHandler)
                 .and()
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
@@ -73,6 +83,11 @@ public class SecurityConfig {
         daoAuthenticationProvider.setUserDetailsService(userDetailsService());
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
+    }
+
+    @Bean
+    public AllOAuth2LoginSuccessHandler oAuth2LoginSuccessHandler() {
+        return new AllOAuth2LoginSuccessHandler(googleOAuth2LoginSuccessHandler, userRepository, githubOAuth2LoginSuccessHandler);
     }
 
     @Bean
