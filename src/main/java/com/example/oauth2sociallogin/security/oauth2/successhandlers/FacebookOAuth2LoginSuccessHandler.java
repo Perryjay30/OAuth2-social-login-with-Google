@@ -1,6 +1,7 @@
-package com.example.oauth2sociallogin.security.oauth2;
+package com.example.oauth2sociallogin.security.oauth2.successhandlers;
 
 import com.example.oauth2sociallogin.exceptions.OAuth2SocialLoginException;
+import com.example.oauth2sociallogin.security.oauth2.CustomOauth2User;
 import com.example.oauth2sociallogin.user.data.model.AuthProvider;
 import com.example.oauth2sociallogin.user.data.model.User;
 import com.example.oauth2sociallogin.user.repository.UserRepository;
@@ -15,10 +16,10 @@ import java.io.IOException;
 import java.util.Optional;
 
 @Service
-public class GoogleOAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+public class FacebookOAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final UserRepository userRepository;
 
-    public GoogleOAuth2LoginSuccessHandler(UserRepository userRepository) {
+    public FacebookOAuth2LoginSuccessHandler(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -28,27 +29,27 @@ public class GoogleOAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSucc
         String firstName = oauth2User.getName();
         Optional<User> user = userRepository.findByEmailAddress(emailAddress);
         if (user.isEmpty()) {
-            createNewUserAfterOAuthLoginSuccess(emailAddress, firstName);
+            createNewUserAfterGithubOAuthLoginSuccess(emailAddress, firstName);
         } else {
-            updateUserAfterOAuthLoginSuccess(emailAddress, firstName);
+            updateUserAfterGithubOAuthLoginSuccess(emailAddress, firstName);
         }
 
         System.out.println("User's emailAddress: " + emailAddress);
         super.onAuthenticationSuccess(request, response, authentication);
     }
 
-    private void updateUserAfterOAuthLoginSuccess(String emailAddress, String firstName) {
+    private void updateUserAfterGithubOAuthLoginSuccess(String emailAddress, String firstName) {
         User existingUser = userRepository.findByEmailAddress(emailAddress).orElseThrow(() ->
-            new OAuth2SocialLoginException("User not found!!"));
-        existingUser.setAuthProvider(AuthProvider.GOOGLE);
+                new OAuth2SocialLoginException("User not found!!"));
+        existingUser.setAuthProvider(AuthProvider.FACEBOOK);
         existingUser.setFirstName(firstName);
         userRepository.save(existingUser);
     }
 
-    private void createNewUserAfterOAuthLoginSuccess(String emailAddress, String firstName) {
+    private void createNewUserAfterGithubOAuthLoginSuccess(String emailAddress, String firstName) {
         User user = new User();
         user.setEmailAddress(emailAddress);
-        user.setAuthProvider(AuthProvider.GOOGLE);
+        user.setAuthProvider(AuthProvider.FACEBOOK);
         user.setFirstName(firstName);
         userRepository.save(user);
     }

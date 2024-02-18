@@ -1,5 +1,8 @@
 package com.example.oauth2sociallogin.security.oauth2;
 
+import com.example.oauth2sociallogin.security.oauth2.successhandlers.FacebookOAuth2LoginSuccessHandler;
+import com.example.oauth2sociallogin.security.oauth2.successhandlers.GithubOAuth2LoginSuccessHandler;
+import com.example.oauth2sociallogin.security.oauth2.successhandlers.GoogleOAuth2LoginSuccessHandler;
 import com.example.oauth2sociallogin.user.repository.UserRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

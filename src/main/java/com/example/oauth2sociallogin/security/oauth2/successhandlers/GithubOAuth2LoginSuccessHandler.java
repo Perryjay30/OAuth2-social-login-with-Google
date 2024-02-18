@@ -1,6 +1,7 @@
-package com.example.oauth2sociallogin.security.oauth2;
+package com.example.oauth2sociallogin.security.oauth2.successhandlers;
 
 import com.example.oauth2sociallogin.exceptions.OAuth2SocialLoginException;
+import com.example.oauth2sociallogin.security.oauth2.CustomOauth2User;
 import com.example.oauth2sociallogin.user.data.model.AuthProvider;
 import com.example.oauth2sociallogin.user.data.model.User;
 import com.example.oauth2sociallogin.user.repository.UserRepository;
