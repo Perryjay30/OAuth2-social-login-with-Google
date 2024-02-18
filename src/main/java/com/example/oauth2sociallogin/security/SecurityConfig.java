@@ -1,9 +1,6 @@
 package com.example.oauth2sociallogin.security;
 
-import com.example.oauth2sociallogin.security.oauth2.AllOAuth2LoginSuccessHandler;
-import com.example.oauth2sociallogin.security.oauth2.CustomOAuth2UserService;
-import com.example.oauth2sociallogin.security.oauth2.GithubOAuth2LoginSuccessHandler;
-import com.example.oauth2sociallogin.security.oauth2.GoogleOAuth2LoginSuccessHandler;
+import com.example.oauth2sociallogin.security.oauth2.*;
 import com.example.oauth2sociallogin.user.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,15 +29,17 @@ public class SecurityConfig {
     private final AllOAuth2LoginSuccessHandler allOAuth2LoginSuccessHandler;
     private final GoogleOAuth2LoginSuccessHandler googleOAuth2LoginSuccessHandler;
     private final GithubOAuth2LoginSuccessHandler githubOAuth2LoginSuccessHandler;
+    private final FacebookOAuth2LoginSuccessHandler facebookOAuth2LoginSuccessHandler;
 
     public SecurityConfig(JwtFilter jwtFilter, UserRepository userRepository, CustomOAuth2UserService customOAuth2UserService,
-                          AllOAuth2LoginSuccessHandler allOAuth2LoginSuccessHandler, GoogleOAuth2LoginSuccessHandler googleOAuth2LoginSuccessHandler, GithubOAuth2LoginSuccessHandler githubOAuth2LoginSuccessHandler) {
+                          AllOAuth2LoginSuccessHandler allOAuth2LoginSuccessHandler, GoogleOAuth2LoginSuccessHandler googleOAuth2LoginSuccessHandler, GithubOAuth2LoginSuccessHandler githubOAuth2LoginSuccessHandler, FacebookOAuth2LoginSuccessHandler facebookOAuth2LoginSuccessHandler) {
         this.jwtFilter = jwtFilter;
         this.userRepository = userRepository;
         this.customOAuth2UserService = customOAuth2UserService;
         this.allOAuth2LoginSuccessHandler = allOAuth2LoginSuccessHandler;
         this.googleOAuth2LoginSuccessHandler = googleOAuth2LoginSuccessHandler;
         this.githubOAuth2LoginSuccessHandler = githubOAuth2LoginSuccessHandler;
+        this.facebookOAuth2LoginSuccessHandler = facebookOAuth2LoginSuccessHandler;
     }
 
     @Bean
@@ -87,7 +86,7 @@ public class SecurityConfig {
 
     @Bean
     public AllOAuth2LoginSuccessHandler oAuth2LoginSuccessHandler() {
-        return new AllOAuth2LoginSuccessHandler(googleOAuth2LoginSuccessHandler, userRepository, githubOAuth2LoginSuccessHandler);
+        return new AllOAuth2LoginSuccessHandler(googleOAuth2LoginSuccessHandler, userRepository, githubOAuth2LoginSuccessHandler, facebookOAuth2LoginSuccessHandler);
     }
 
     @Bean
