@@ -29,16 +29,16 @@ public class FacebookOAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSu
         String firstName = oauth2User.getName();
         Optional<User> user = userRepository.findByEmailAddress(emailAddress);
         if (user.isEmpty()) {
-            createNewUserAfterGithubOAuthLoginSuccess(emailAddress, firstName);
+            createNewUserAfterFacebookOAuthLoginSuccess(emailAddress, firstName);
         } else {
-            updateUserAfterGithubOAuthLoginSuccess(emailAddress, firstName);
+            updateUserAfterFacebookOAuthLoginSuccess(emailAddress, firstName);
         }
 
         System.out.println("User's emailAddress: " + emailAddress);
         super.onAuthenticationSuccess(request, response, authentication);
     }
 
-    private void updateUserAfterGithubOAuthLoginSuccess(String emailAddress, String firstName) {
+    private void updateUserAfterFacebookOAuthLoginSuccess(String emailAddress, String firstName) {
         User existingUser = userRepository.findByEmailAddress(emailAddress).orElseThrow(() ->
                 new OAuth2SocialLoginException("User not found!!"));
         existingUser.setAuthProvider(AuthProvider.FACEBOOK);
@@ -46,7 +46,7 @@ public class FacebookOAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSu
         userRepository.save(existingUser);
     }
 
-    private void createNewUserAfterGithubOAuthLoginSuccess(String emailAddress, String firstName) {
+    private void createNewUserAfterFacebookOAuthLoginSuccess(String emailAddress, String firstName) {
         User user = new User();
         user.setEmailAddress(emailAddress);
         user.setAuthProvider(AuthProvider.FACEBOOK);
